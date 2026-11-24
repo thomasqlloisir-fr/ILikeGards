@@ -1,0 +1,5 @@
+# Les fichiers Excel sources ne doivent JAMAIS être publiés (dépôt public)
+donnees/
+*.xlsx
+*.xls
+__pycache__/

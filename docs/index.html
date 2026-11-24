@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2a78d6">
+<title>Fiche produit</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#f3f3f1; --surface:#fcfcfb; --line:#e2e1dc; --text:#0b0b0b; --text2:#52514e; --muted:#7a7974;
+  --accent:#2a78d6; --accent-soft:#cde2fb; --bar:#2a78d6;
+  --crit:#c62f2e; --crit-bg:#fde7e6; --warn-bg:#fff3d6; --warn:#8a5a00; --good:#0a7d0a; --good-bg:#e3f5e3;
+  --dm:#6250d6; --dm-bg:#ebe8fb;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#111110; --surface:#1a1a19; --line:#33332f; --text:#f0efec; --text2:#c3c2b7; --muted:#9a998f;
+  --accent:#3987e5; --accent-soft:#1c3a60; --bar:#3987e5;
+  --crit:#ff8a88; --crit-bg:#3f1a1a; --warn-bg:#3a2d0c; --warn:#f5c35b; --good:#6fd66f; --good-bg:#16301a;
+  --dm:#9085e9; --dm-bg:#27224a;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+.hidden{display:none!important}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 12px 8px;border-bottom:1px solid var(--line)}
+.searchrow{display:flex;gap:8px}
+#q{flex:1;min-width:0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:16px}
+#q:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:0 14px;min-width:46px}
+.filters{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+main{padding:10px 12px 40px;max-width:820px;margin:0 auto}
+.info{color:var(--muted);font-size:13px;margin:6px 2px}
+.res{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.res .l{font-weight:600;font-size:14px}
+.res .sub{color:var(--text2);font-size:12.5px;margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:6px;letter-spacing:.02em}
+.b-MED{background:var(--accent-soft);color:var(--accent)}
+.b-DM{background:var(--dm-bg);color:var(--dm)}
+.b-NONE{background:var(--line);color:var(--text2)}
+.b-crit{background:var(--crit-bg);color:var(--crit)}
+.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-good{background:var(--good-bg);color:var(--good)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+.title{font-size:17px;font-weight:700;margin:2px 0 6px}
+.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.kv div{background:var(--bg);border-radius:10px;padding:7px 9px}
+.kv .k{font-size:11.5px;color:var(--text2)}
+.kv .v{font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;word-break:break-word}
+.kv .wide{grid-column:1/-1}
+.hero{display:flex;gap:10px;margin-bottom:10px}
+.hero div{flex:1;background:var(--bg);border-radius:10px;padding:8px 10px}
+.hero .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.hero .k{font-size:12px;color:var(--text2)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-weight:600;color:var(--text2);font-size:12px;text-align:left;border-bottom:1px solid var(--line);padding:5px 4px}
+td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.small{font-size:12px;color:var(--text2)}
+.empty{color:var(--muted);font-style:italic;font-size:13.5px}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--accent);font-size:13.5px;padding:4px 0}
+a{color:var(--accent)}
+.chart{position:relative;height:120px;display:flex;align-items:flex-end;gap:2px;border-bottom:1px solid var(--line);margin:6px 0 4px;touch-action:pan-y}
+.chart .c{flex:1;height:100%;display:flex;align-items:flex-end;position:relative}
+.chart .c i{display:block;width:100%;background:var(--bar);border-radius:4px 4px 0 0;min-height:0}
+.chart .c.neg i{background:var(--muted)}
+.chart .c.sel i{outline:2px solid var(--text);outline-offset:1px}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.tip{min-height:20px;font-size:13px;color:var(--text2);margin-top:4px}
+.tip b{color:var(--text)}
+.uf{color:var(--text2);font-size:12px}
+.login{max-width:380px;margin:12vh auto 0;padding:0 18px}
+.login h1{font-size:22px;margin:0 0 6px}
+.login input[type=password]{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:16px;margin:14px 0 10px}
+.btn{width:100%;padding:13px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:600;font-size:16px}
+.err{color:var(--crit);font-size:14px;min-height:20px;margin-top:8px}
+.back{border:0;background:none;color:var(--accent);padding:4px 0 8px;font-size:15px}
+.pill{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--bg);color:var(--text2);margin-left:6px;font-weight:500;text-transform:none;letter-spacing:0}
+</style>
+</head>
+<body>
+
+<section id="login" class="login">
+  <h1>Fiche produit</h1>
+  <div class="small">Données chiffrées — saisissez le mot de passe.</div>
+  <form id="loginForm">
+    <input id="pwd" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
+    <label class="small"><input type="checkbox" id="remember"> Mémoriser sur cet appareil</label>
+    <div style="height:12px"></div>
+    <button class="btn" id="loginBtn">Ouvrir</button>
+    <div class="err" id="err"></div>
+  </form>
+</section>
+
+<section id="app" class="hidden">
+  <header>
+    <div class="searchrow">
+      <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="N° produit, nom, ATC, réf. fournisseur…">
+      <button class="iconbtn" id="lock" title="Verrouiller" aria-label="Verrouiller">🔒</button>
+    </div>
+    <div class="filters" id="filters">
+      <button class="chip on" data-f="ALL">Tous</button>
+      <button class="chip" data-f="MED">Médic.</button>
+      <button class="chip" data-f="DM">DM</button>
+      <button class="chip" data-f="ALERT">⚠ Sous seuil</button>
+    </div>
+  </header>
+  <main id="main"></main>
+</section>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nf = new Intl.NumberFormat("fr-FR", {maximumFractionDigits: 2});
+const num = v => (v === null || v === undefined || v === "") ? "—" : (typeof v === "number" ? nf.format(v) : esc(v));
+const fdate = d => d ? d.split("-").reverse().join("/") : "—";
+const norm = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+let DB = null, IDX = [], filter = "ALL";
+
+/* ---------- Déchiffrement ---------- */
+async function decrypt(pwd) {
+  const enc = await (await fetch("data.enc", {cache: "no-cache"})).json();
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pwd), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    {name: "PBKDF2", salt: b64(enc.salt), iterations: enc.iter, hash: "SHA-256"},
+    base, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({name: "AES-GCM", iv: b64(enc.iv)}, key, b64(enc.data));
+  const stream = new Blob([plain]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return JSON.parse(await new Response(stream).text());
+}
+
+async function unlock(pwd, remember) {
+  $("#err").textContent = "";
+  $("#loginBtn").disabled = true; $("#loginBtn").textContent = "Déchiffrement…";
+  try {
+    DB = await decrypt(pwd);
+    if (remember) localStorage.setItem("pf_pwd", pwd);
+    buildIndex();
+    $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+    route();
+  } catch (e) {
+    console.error(e);
+    localStorage.removeItem("pf_pwd");
+    $("#err").textContent = (e.name === "OperationError") ? "Mot de passe incorrect." : "Erreur : " + e.message;
+  } finally {
+    $("#loginBtn").disabled = false; $("#loginBtn").textContent = "Ouvrir";
+  }
+}
+
+$("#loginForm").addEventListener("submit", e => { e.preventDefault(); unlock($("#pwd").value, $("#remember").checked); });
+$("#lock").addEventListener("click", () => { localStorage.removeItem("pf_pwd"); location.hash = ""; location.reload(); });
+
+/* ---------- Helpers produit ---------- */
+function stockObj(row) {            // row = [type, ...valeurs] -> {col: val}
+  const cols = DB.meta.stock_cols[row[0]] || [];
+  const o = {_type: row[0]};
+  cols.forEach((c, i) => o[c] = row[i + 1]);
+  return o;
+}
+function stockTotal(p) { return p.s.reduce((a, r) => a + (Number(stockObj(r)["Qté Stock"]) || 0), 0); }
+function isAlert(p) {
+  return p.s.some(r => { const o = stockObj(r); const q = Number(o["Qté Stock"]) || 0, ss = Number(o["Seuil Sécu"]) || 0;
+    return ss > 0 && q <= ss; });
+}
+function typeOf(p) { return p.t.length ? p.t.join("+") : "NONE"; }
+function typeBadge(p) {
+  if (!p.t.length) return `<span class="badge b-NONE">HORS RÉF.</span>`;
+  return p.t.map(t => `<span class="badge b-${t}">${t}</span>`).join(" ");
+}
+
+function buildIndex() {
+  IDX = Object.entries(DB.p).map(([id, p]) => {
+    const extra = p.s.map(r => { const o = stockObj(r); return [o["Réf. Fournisseur"], o["Intitulé Fournisseur"]].join(" "); }).join(" ");
+    return {id, p, txt: norm([id, p.l, p.a, extra].join(" "))};
+  });
+}
+
+/* ---------- Recherche ---------- */
+function search(q) {
+  const toks = norm(q).split(/\s+/).filter(Boolean);
+  let list = IDX;
+  if (filter === "MED" || filter === "DM") list = list.filter(x => x.p.t.includes(filter));
+  if (filter === "ALERT") list = list.filter(x => isAlert(x.p));
+  if (toks.length) list = list.filter(x => toks.every(t => x.txt.includes(t)));
+  else if (filter === "ALL") return null;
+  const qn = norm(q).trim();
+  return list.slice().sort((a, b) => (b.id === qn) - (a.id === qn) || (b.p.m.length - a.p.m.length));
+}
+
+function renderSearch() {
+  const q = $("#q").value, res = search(q), m = DB.meta;
+  if (!res) {
+    $("#main").innerHTML = `
+      <div class="card"><h2>Données</h2>
+        <div class="small">${Object.keys(DB.p).length.toLocaleString("fr-FR")} produits — générées le ${esc(m.genere)}<br>
+        Sorties du ${fdate(m.mvts_du)} au ${fdate(m.mvts_au)}</div>
+        <table style="margin-top:8px">${m.sources.map(s => `<tr><td>${esc(s.fichier)}</td><td class="n">${s.lignes.toLocaleString("fr-FR")} lignes</td></tr>`).join("")}</table>
+      </div>
+      <div class="info">Tapez un numéro, un nom (ex. « nefopam »), un code ATC ou une référence fournisseur. Plusieurs mots = tous requis.</div>`;
+    return;
+  }
+  const shown = res.slice(0, 80);
+  $("#main").innerHTML = `<div class="info">${res.length.toLocaleString("fr-FR")} résultat(s)${res.length > 80 ? " — 80 premiers affichés" : ""}</div>` +
+    shown.map(({id, p}) => {
+      const st = p.s.length ? `Stock ${num(stockTotal(p))}` : "";
+      const al = isAlert(p) ? `<span class="badge b-crit">⚠ sous seuil</span>` : "";
+      return `<button class="res" data-id="${esc(id)}"><div class="l">${esc(p.l || "(sans libellé)")}</div>
+        <div class="sub">${typeBadge(p)} <span>N° ${esc(id)}</span>${p.a ? `<span>${esc(p.a)}</span>` : ""}<span>${st}</span>${al}
+        ${p.m.length ? `<span>${p.m.length} sortie(s)</span>` : ""}${p.d.length ? `<span>${p.d.length} dotation(s)</span>` : ""}</div></button>`;
+    }).join("");
+}
+
+let tmr;
+$("#q").addEventListener("input", () => { clearTimeout(tmr); tmr = setTimeout(() => { if (location.hash) history.replaceState(null, "", " "); renderSearch(); }, 150); });
+$("#q").addEventListener("keydown", e => {
+  if (e.key === "Enter") { const r = search($("#q").value); if (r && r.length === 1 || (r && r[0] && r[0].id === norm($("#q").value).trim())) openProduct(r[0].id); $("#q").blur(); }
+});
+$("#filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  filter = b.dataset.f; document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  if (location.hash) history.pushState(null, "", " ");
+  renderSearch();
+});
+$("#main").addEventListener("click", e => {
+  const r = e.target.closest(".res"); if (r) openProduct(r.dataset.id);
+  if (e.target.closest(".back")) history.back();
+});
+
+/* ---------- Fiche produit ---------- */
+function openProduct(id) { location.hash = "p=" + encodeURIComponent(id); }
+function route() {
+  const m = location.hash.match(/^#p=(.+)$/);
+  if (m && DB && DB.p[decodeURIComponent(m[1])]) renderProduct(decodeURIComponent(m[1]));
+  else if (DB) renderSearch();
+}
+window.addEventListener("hashchange", route);
+
+const KEYS_MAIN = ["Qté Stock", "Qté Cde", "Seuil Sécu", "Seuil Fixe", "Préco", "Zone Stock", "Condit.", "Date Dern Cde",
+  "CMJ", "Qte Conso EXC", "PMP", "PU Marché", "Délai Cde", "Délai Moy Réap"];
+
+function stockCard(p) {
+  if (!p.s.length) return `<div class="card"><h2>Stock / référentiel</h2><div class="empty">Produit absent des fichiers stock (MED et DM).</div></div>`;
+  return p.s.map((r, i) => {
+    const o = stockObj(r);
+    const q = Number(o["Qté Stock"]) || 0, ss = Number(o["Seuil Sécu"]) || 0;
+    const status = ss > 0 && q <= ss ? `<span class="badge b-crit">⚠ Sous seuil sécu</span>`
+                 : q === 0 ? `<span class="badge b-warn">Stock nul</span>` : `<span class="badge b-good">✓ OK</span>`;
+    const keys = KEYS_MAIN.filter(k => k in o);
+    const rest = Object.keys(o).filter(k => k !== "_type" && !keys.includes(k));
+    const tel = o["No Tél"] ? `<a href="tel:${esc(String(o["No Tél"]).replace(/\s/g, ""))}">${esc(o["No Tél"])}</a>` : "—";
+    const fmt = (k, v) => /^Date/.test(k) ? fdate(v) : num(v);
+    return `<div class="card"><h2>Stock ${esc(o._type)}${p.s.length > 1 ? ` <span class="pill">ligne ${i + 1}/${p.s.length}</span>` : ""} ${status}</h2>
+      <div class="kv">${keys.map(k => `<div><div class="k">${esc(k)}</div><div class="v">${fmt(k, o[k])}</div></div>`).join("")}
+        <div class="wide"><div class="k">Fournisseur</div><div class="v" style="font-size:15px">${num(o["Intitulé Fournisseur"])}
+          <span class="small">(${num(o["No Fournisseur"])})</span><br><span class="small">${num(o["Point Cde (raison sociale)"])} — ${tel}</span></div></div>
+      </div>
+      <details><summary>Toutes les colonnes</summary><table>${rest.map(k => `<tr><td class="small">${esc(k)}</td><td class="n">${fmt(k, o[k])}</td></tr>`).join("")}</table></details>
+    </div>`;
+  }).join("");
+}
+
+function movesCard(p) {
+  const M = p.m, meta = DB.meta;
+  if (!M.length) return `<div class="card"><h2>Sorties</h2><div class="empty">Aucune sortie du ${fdate(meta.mvts_du)} au ${fdate(meta.mvts_au)}.</div></div>`;
+  const total = M.reduce((a, x) => a + (Number(x[1]) || 0), 0);
+  // par jour
+  const days = [], byDay = {};
+  for (let d = new Date(meta.mvts_du + "T12:00"); d <= new Date(meta.mvts_au + "T12:00"); d.setDate(d.getDate() + 1)) days.push(d.toISOString().slice(0, 10));
+  M.forEach(x => byDay[x[0]] = (byDay[x[0]] || 0) + (Number(x[1]) || 0));
+  const max = Math.max(1, ...days.map(d => Math.abs(byDay[d] || 0)));
+  const nDays = days.length || 1;
+  // par UF
+  const byUf = {};
+  M.forEach(x => { const u = byUf[x[2]] ||= {q: 0, n: 0}; u.q += Number(x[1]) || 0; u.n++; });
+  const ufs = Object.entries(byUf).sort((a, b) => b[1].q - a[1].q);
+  const bars = days.map(d => { const v = byDay[d] || 0;
+    return `<div class="c${v < 0 ? " neg" : ""}" data-d="${d}" data-v="${v}"><i style="height:${Math.abs(v) / max * 100}%"></i></div>`; }).join("");
+  return `<div class="card"><h2>Sorties <span class="pill">${fdate(meta.mvts_du)} → ${fdate(meta.mvts_au)}</span></h2>
+    <div class="hero"><div><div class="v">${num(total)}</div><div class="k">quantité nette sortie</div></div>
+      <div><div class="v">${nf.format(total / nDays)}</div><div class="k">moyenne / jour</div></div>
+      <div><div class="v">${ufs.length}</div><div class="k">services</div></div></div>
+    <div class="small">Quantité sortie par jour (touchez une barre)</div>
+    <div class="chart" role="img" aria-label="Sorties par jour">${bars}</div>
+    <div class="axis"><span>${fdate(days[0])}</span><span>${fdate(days[days.length - 1])}</span></div>
+    <div class="tip" id="tip"></div>
+    <table style="margin-top:8px"><tr><th>Service (UF)</th><th class="n">Lignes</th><th class="n">Qté</th></tr>
+      ${ufs.map(([u, v]) => `<tr><td>${esc(DB.uf[u] || "")} <span class="uf">${esc(u)}</span></td><td class="n">${v.n}</td><td class="n"><b>${num(v.q)}</b></td></tr>`).join("")}</table>
+    <details><summary>Détail des ${M.length} mouvement(s)</summary><table>
+      <tr><th>Date</th><th>Service</th><th class="n">Qté</th></tr>
+      ${M.map(x => `<tr><td>${fdate(x[0])}</td><td>${esc(DB.uf[x[2]] || "")} <span class="uf">${esc(x[2])}</span></td><td class="n">${num(x[1])}</td></tr>`).join("")}
+    </table></details></div>`;
+}
+
+function dotCard(p) {
+  const D = p.d;
+  if (!D.length) return `<div class="card"><h2>Dotations de service</h2><div class="empty">Aucun service doté.</div></div>`;
+  const sortiesUf = {};
+  p.m.forEach(x => sortiesUf[x[2]] = (sortiesUf[x[2]] || 0) + (Number(x[1]) || 0));
+  const tot = D.reduce((a, x) => a + (Number(x[2]) || 0), 0);
+  const rows = D.slice().sort((a, b) => (Number(b[2]) || 0) - (Number(a[2]) || 0));
+  const dotUfs = new Set(D.map(x => x[1]));
+  const horsDot = Object.keys(sortiesUf).filter(u => !dotUfs.has(u));
+  return `<div class="card"><h2>Dotations de service <span class="pill">${D.length} ligne(s)</span></h2>
+    <div class="hero"><div><div class="v">${num(tot)}</div><div class="k">prévision conso totale</div></div>
+      <div><div class="v">${dotUfs.size}</div><div class="k">services dotés</div></div></div>
+    <table><tr><th>Service / catalogue</th><th class="n">Prév.</th><th class="n">Sorties</th></tr>
+    ${rows.map(x => `<tr><td>${esc(DB.uf[x[1]] || "")} <span class="uf">${esc(x[1])}</span><br>
+        <span class="small">${esc(x[0])} · ${esc(DB.cat[x[0]] || "")}${x[3] ? " · empl. " + esc(x[3]) : ""}</span></td>
+      <td class="n"><b>${num(x[2])}</b></td><td class="n">${sortiesUf[x[1]] !== undefined ? num(sortiesUf[x[1]]) : "—"}</td></tr>`).join("")}
+    </table>
+    ${horsDot.length ? `<div class="small" style="margin-top:8px">Sorties vers des services <b>non dotés</b> : ${horsDot.map(u => `${esc(DB.uf[u] || u)} (${num(sortiesUf[u])})`).join(", ")}</div>` : ""}
+    </div>`;
+}
+
+function renderProduct(id) {
+  const p = DB.p[id];
+  $("#main").innerHTML = `<button class="back">← Retour</button>
+    <div class="card"><div>${typeBadge(p)} ${isAlert(p) ? `<span class="badge b-crit">⚠ sous seuil</span>` : ""}</div>
+      <div class="title">${esc(p.l || "(sans libellé)")}</div>
+      <div class="small">N° produit <b>${esc(id)}</b>${p.a ? ` · ATC <b>${esc(p.a)}</b>` : ""}${p.d[0] && p.d[0][4] ? ` · UCD ${esc(p.d[0][4])}` : ""}</div></div>
+    ${stockCard(p)}${movesCard(p)}${dotCard(p)}`;
+  window.scrollTo(0, 0);
+  const chart = document.querySelector(".chart");
+  if (chart) {
+    const show = e => {
+      const pt = e.touches ? e.touches[0] : e;
+      const el = document.elementFromPoint(pt.clientX, pt.clientY);
+      const c = el && el.closest(".c"); if (!c || !chart.contains(c)) return;
+      chart.querySelectorAll(".sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
+      const d = new Date(c.dataset.d + "T12:00");
+      $("#tip").innerHTML = `${d.toLocaleDateString("fr-FR", {weekday: "short", day: "2-digit", month: "2-digit"})} : <b>${num(Number(c.dataset.v))}</b>`;
+    };
+    chart.addEventListener("click", show); chart.addEventListener("mousemove", show); chart.addEventListener("touchmove", show, {passive: true});
+  }
+}
+
+/* ---------- Démarrage ---------- */
+const saved = localStorage.getItem("pf_pwd");
+if (saved) { $("#remember").checked = true; unlock(saved, true); }
+if (!window.DecompressionStream || !crypto.subtle) $("#err").textContent = "Navigateur trop ancien : utilisez Chrome à jour.";
+</script>
+</body>
+</html>
